@@ -60,7 +60,8 @@ class TodoRepository_UT(Abstract_UT):
             TodoSample.builder().build(),
             TodoSample.builder().build(),
         ]
-        list(map(self.todo_repository.insert, todos))
+        for todo in todos:
+            self.todo_repository.insert(todo)
 
         # test
         selected_todos = self.todo_repository.select_all()
@@ -75,7 +76,8 @@ class TodoRepository_UT(Abstract_UT):
             TodoSample.builder().build(),
             TodoSample.builder().build(),
         ]
-        list(map(self.todo_repository.insert, todos))
+        for todo in todos:
+            self.todo_repository.insert(todo)
 
         # test
         self.todo_repository.delete_all()
