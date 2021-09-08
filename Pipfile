@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+
+[dev-packages]
+flake8 = "*"
+autopep8 = "*"
+mypy = "*"
+
+[requires]
+python_version = "3.9"
+
+[scripts]
+start = "uvicorn main:app --reload"
+test = "python -m unittest discover test"
