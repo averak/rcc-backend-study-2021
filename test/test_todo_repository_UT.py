@@ -7,7 +7,7 @@ class TodoRepository_UT(Abstract_UT):
     todo_repository = TodoRepository()
 
     def setUp(self):
-        self.todo_repository.todos = {}
+        self.todo_repository.todos = []
 
     def test_正_TODOを作成する(self):
         # setup
@@ -40,7 +40,7 @@ class TodoRepository_UT(Abstract_UT):
         self.todo_repository.insert(todo)
 
         # test
-        self.todo_repository.delete(todo.id)
+        self.todo_repository.delete_by_id(todo.id)
 
         # verify
         self.assertEqual(0, len(self.todo_repository.todos))

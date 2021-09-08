@@ -1,18 +1,23 @@
 import copy
+from typing import Optional
 
 from model.todo_model import TodoModel
 
 
 class TodoRepository:
-    todos: dict[int, TodoModel] = {}
+    todos: list[TodoModel] = []
 
     def insert(self, todo: TodoModel) -> int:
         """
         TODOを作成する
         """
         # IDを自動採番
-        todo.id = len(self.todos)
-        self.todos[todo.id] = copy.deepcopy(todo)
+        if self.todos == []:
+            todo.id = 0
+        else:
+            max_id: int = max([todo.id for todo in self.todos])
+            todo.id = max_id + 1
+        self.todos.append(copy.deepcopy(todo))
 
         return todo.id
 
@@ -20,22 +25,25 @@ class TodoRepository:
         """
         TODOを更新する
         """
-        if todo.id in self.todos:
-            self.todos[todo.id] = copy.deepcopy(todo)
+        todo_index = self.__get_todo_index(todo.id)
+        if todo_index is not None:
+            self.todos[todo_index] = copy.deepcopy(todo)
 
-    def delete(self, todo_id: int) -> None:
+    def delete_by_id(self, todo_id: int) -> None:
         """
         TODOを削除する
         """
-        if todo_id in self.todos:
-            self.todos.pop(todo_id)
+        todo_index = self.__get_todo_index(todo_id)
+        if todo_index is not None:
+            self.todos.pop(todo_index)
 
-    def select_by_id(self, todo_id: int) -> TodoModel:
+    def select_by_id(self, todo_id: int) -> Optional[TodoModel]:
         """
         IDからTODOを取得する
         """
-        if todo_id in self.todos:
-            return self.todos[todo_id]
+        todo_index = self.__get_todo_index(todo_id)
+        if todo_index is not None:
+            return self.todos[todo_index]
         else:
             return None
 
@@ -43,10 +51,14 @@ class TodoRepository:
         """
         TODOを全件取得する
         """
-        return list(self.todos.values())
+        return self.todos
 
     def delete_all(self) -> None:
         """
         TODOを全て削除
         """
-        self.todos = {}
+        self.todos = []
+
+    def __get_todo_index(self, todo_id: int) -> Optional[int]:
+        todo_id_list: list[int] = [todo.id for todo in self.todos]
+        return todo_id_list.index(todo_id) if todo_id in todo_id_list else None
