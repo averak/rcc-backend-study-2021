@@ -21,3 +21,18 @@ pipenv install
 ```sh
 pipenv run start
 ```
+
+本コマンドを実行すると[localhost:8000](http://localhost:8000/)へアクセスできるようになります。
+
+### 3. テストを実行
+
+```sh
+pipenv run test
+```
+
+## API docs
+
+このプロジェクトは Swagger をサポートしています。
+
+1. アプリケーションを起動
+2. [Swagger UI](http://localhost:8000/docs)にアクセス
