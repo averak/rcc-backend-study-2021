@@ -1,5 +1,6 @@
 import copy
 from typing import Optional
+from fastapi import HTTPException
 
 from model.todo_model import TodoModel
 
@@ -28,6 +29,8 @@ class TodoRepository:
         todo_index = self.__get_todo_index(todo.id)
         if todo_index is not None:
             self.todos[todo_index] = copy.deepcopy(todo)
+        else:
+            raise HTTPException(status_code=404, detail='TODO is not found.')
 
     def delete_by_id(self, todo_id: int) -> None:
         """
@@ -36,6 +39,8 @@ class TodoRepository:
         todo_index = self.__get_todo_index(todo_id)
         if todo_index is not None:
             self.todos.pop(todo_index)
+        else:
+            raise HTTPException(status_code=404, detail='TODO is not found.')
 
     def select_by_id(self, todo_id: int) -> Optional[TodoModel]:
         """
