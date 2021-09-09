@@ -1,3 +1,5 @@
+from fastapi import HTTPException
+
 from test.abstract_UT import Abstract_UT
 from test.sample.todo_sample import TodoSample
 from repository.todo_repository import TodoRepository
@@ -34,6 +36,14 @@ class TodoRepository_UT(Abstract_UT):
         updated_todo = self.todo_repository.todos[todo.id]
         self.assertEqual(todo, updated_todo)
 
+    def test_異_更新対象のTODOが存在しない(self):
+        # setup
+        todo = TodoSample.builder().build()
+
+        # test
+        with self.assertRaises(HTTPException):
+            self.todo_repository.update(todo)
+
     def test_正_TODOを削除する(self):
         # setup
         todo = TodoSample.builder().build()
@@ -45,6 +55,11 @@ class TodoRepository_UT(Abstract_UT):
         # verify
         self.assertEqual(0, len(self.todo_repository.todos))
 
+    def test_異_削除対象のTODOが存在しない(self):
+        # test
+        with self.assertRaises(HTTPException):
+            self.todo_repository.delete_by_id(self.SAMPLE_INT)
+
     def test_正_IDからTODOを取得(self):
         # setup
         todo = TodoSample.builder().build()
@@ -52,6 +67,11 @@ class TodoRepository_UT(Abstract_UT):
 
         # verify
         self.assertEqual(todo, self.todo_repository.select_by_id(todo.id))
+
+    def test_異_取得したいIDが存在しない(self):
+        # test
+        with self.assertRaises(HTTPException):
+            self.todo_repository.select_by_id(self.SAMPLE_INT)
 
     def test_正_TODOを全件取得する(self):
         # setup

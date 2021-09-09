@@ -42,7 +42,7 @@ class TodoRepository:
         else:
             raise HTTPException(status_code=404, detail='TODO is not found.')
 
-    def select_by_id(self, todo_id: int) -> Optional[TodoModel]:
+    def select_by_id(self, todo_id: int) -> TodoModel:
         """
         IDからTODOを取得する
         """
@@ -50,7 +50,7 @@ class TodoRepository:
         if todo_index is not None:
             return self.todos[todo_index]
         else:
-            return None
+            raise HTTPException(status_code=404, detail='TODO is not found.')
 
     def select_all(self) -> list[TodoModel]:
         """
