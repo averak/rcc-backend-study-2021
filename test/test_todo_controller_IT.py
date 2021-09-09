@@ -69,6 +69,15 @@ class TodoController_IT(Abstract_IT):
         self.assertEqual(updated_todo.title, request_body.title)
         self.assertEqual(updated_todo.description, request_body.description)
 
+    def test_異_更新対象のTODOが存在しない(self):
+        request_body = TodoUpdateRequest(title='new title', description='new description', is_done=True)
+
+        # test
+        response = self.test_client.put(self.UPDATE_TODO_PATH % self.SAMPLE_INT, json=request_body.__dict__)
+
+        # verify
+        self.assertEqual(404, response.status_code)
+
     def test_正_TODOを削除(self):
         # setup
         todo = TodoSample.builder().is_done(False).build()
@@ -80,3 +89,12 @@ class TodoController_IT(Abstract_IT):
         # verify
         self.assertEqual(200, response.status_code)
         self.assertEqual([], self.todo_repository.select_all())
+
+    def test_異_削除対象のTODOが存在しない(self):
+        request_body = TodoUpdateRequest(title='new title', description='new description', is_done=True)
+
+        # test
+        response = self.test_client.put(self.DELETE_TODO_PATH % self.SAMPLE_INT, json=request_body.__dict__)
+
+        # verify
+        self.assertEqual(404, response.status_code)
